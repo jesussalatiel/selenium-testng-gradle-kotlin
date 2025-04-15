@@ -21,6 +21,13 @@ dependencies {
 
     // This dependency is used by the application.
     implementation(libs.guava)
+
+    // https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
+    implementation("org.seleniumhq.selenium:selenium-java:4.31.0")
+    
+    // https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager
+    implementation("io.github.bonigarcia:webdrivermanager:6.0.1")
+
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -37,5 +44,11 @@ application {
 
 tasks.named<Test>("test") {
     // Use TestNG for unit tests.
-    useTestNG()
+    useTestNG(){
+        suites("src/test/resources/testng.xml")
+    }
+
+    testLogging {
+        events("passed", "skipped", "failed")
+    }
 }
