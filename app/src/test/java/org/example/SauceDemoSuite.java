@@ -3,6 +3,7 @@ package org.example;
 import org.example.builders.EnvironmentBuilder;
 import org.example.builders.LoginBuilder;
 import org.example.utils.Browser;
+import org.example.utils.PracticePages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
@@ -22,7 +23,7 @@ public class SauceDemoSuite {
     Browser browserEnum = Browser.valueOf(browser.toUpperCase());
 
     builder =
-        new EnvironmentBuilder().setDriver(browserEnum).navigate("https://www.saucedemo.com/");
+        new EnvironmentBuilder().setDriver(browserEnum).navigate(PracticePages.SAUCE_DEMO_URL);
   }
 
   @Test
@@ -40,6 +41,7 @@ public class SauceDemoSuite {
 
     WebElement errorMessage =
         builder.getDriver().findElement(By.cssSelector("h3[data-test='error']"));
+
     Assert.assertTrue(
         errorMessage.isDisplayed(),
         "locked_out_user should display an error message due to being locked out.");

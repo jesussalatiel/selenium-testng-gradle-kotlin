@@ -1,5 +1,6 @@
-package org.example.pages;
+package org.example.pages.saucedemo;
 
+import org.example.pages.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 

@@ -1,6 +1,6 @@
 package org.example.builders;
 
-import org.example.pages.LoginPage;
+import org.example.pages.saucedemo.LoginPage;
 import org.openqa.selenium.WebDriver;
 
 public class LoginBuilder extends LoginPage {
