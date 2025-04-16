@@ -9,12 +9,23 @@ public class LoginBuilder extends LoginPage {
     super(driver);
   }
 
-  public LoginBuilder loginAs(String username, String password) {
+  public LoginBuilder withCredentials(String username, String password) {
     login(username, password);
     return this;
   }
 
-  public LoginBuilder run() {
+  public LoginBuilder enterUsername(String username) {
+    setUsername(username);
+    return this;
+  }
+
+  public LoginBuilder enterPassword(String password) {
+    setPassword(password);
+    return this;
+  }
+
+  public LoginPage submit() {
+    performSubmit();
     return this;
   }
 }

@@ -30,6 +30,10 @@ dependencies {
     // https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager
     implementation("io.github.bonigarcia:webdrivermanager:6.0.1")
 
+    implementation("org.slf4j:slf4j-api:2.0.9")
+
+    runtimeOnly("ch.qos.logback:logback-classic:1.4.11")
+
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

@@ -18,17 +18,37 @@ public class SauceDemoSuite {
   private EnvironmentBuilder builder;
 
   @BeforeMethod
-  @Parameters("browser")
-  public void setup(@Optional("CHROME") String browser) {
+  @Parameters({"browser", "device"})
+  public void setup(@Optional("CHROME") String browser, @Optional("DESKTOP") String device) {
     Browser browserEnum = Browser.valueOf(browser.toUpperCase());
 
     builder =
-        new EnvironmentBuilder().setDriver(browserEnum).navigate(PracticePages.SAUCE_DEMO_URL);
+        new EnvironmentBuilder()
+            .setDriver(browserEnum, device)
+            .navigate(PracticePages.SAUCE_DEMO_URL);
+  }
+
+  @Test
+  public void shouldDisplayErrorWhenPasswordIsMissing() {
+    new LoginBuilder(builder.getDriver()).enterUsername("error_user").submit();
+
+    WebElement element = builder.getDriver().findElement(By.cssSelector("h3[data-test='error']"));
+
+    Assert.assertEquals(element.getText(), "Epic sadface: Password is required");
+  }
+
+  @Test
+  public void shouldDisplayErrorWhenUsernameIsMissing() {
+    new LoginBuilder(builder.getDriver()).enterPassword("error_user").submit();
+
+    WebElement element = builder.getDriver().findElement(By.cssSelector("h3[data-test='error']"));
+
+    Assert.assertEquals(element.getText(), "Epic sadface: Username is required");
   }
 
   @Test
   public void shouldHaveErrorUserLogin() {
-    new LoginBuilder(builder.getDriver()).loginAs("error_user", "secret_sauce").run();
+    new LoginBuilder(builder.getDriver()).withCredentials("error_user", "secret_sauce");
 
     Assert.assertTrue(
         builder.getDriver().getCurrentUrl().contains("inventory"),
@@ -37,7 +57,7 @@ public class SauceDemoSuite {
 
   @Test
   public void shouldHaveLockedOutUserError() {
-    new LoginBuilder(builder.getDriver()).loginAs("locked_out_user", "secret_sauce").run();
+    new LoginBuilder(builder.getDriver()).withCredentials("locked_out_user", "secret_sauce");
 
     WebElement errorMessage =
         builder.getDriver().findElement(By.cssSelector("h3[data-test='error']"));
@@ -49,7 +69,8 @@ public class SauceDemoSuite {
 
   @Test
   public void shouldHavePerformanceGlitchUserLogin() {
-    new LoginBuilder(builder.getDriver()).loginAs("performance_glitch_user", "secret_sauce").run();
+    new LoginBuilder(builder.getDriver())
+        .withCredentials("performance_glitch_user", "secret_sauce");
 
     Assert.assertTrue(
         builder.getDriver().getCurrentUrl().contains("inventory"),
@@ -58,7 +79,7 @@ public class SauceDemoSuite {
 
   @Test
   public void shouldHaveProblemUserLogin() {
-    new LoginBuilder(builder.getDriver()).loginAs("problem_user", "secret_sauce").run();
+    new LoginBuilder(builder.getDriver()).withCredentials("problem_user", "secret_sauce");
 
     Assert.assertTrue(
         builder.getDriver().getCurrentUrl().contains("inventory"),
@@ -67,7 +88,7 @@ public class SauceDemoSuite {
 
   @Test
   public void shouldHaveStandardUserLogin() {
-    new LoginBuilder(builder.getDriver()).loginAs("standard_user", "secret_sauce").run();
+    new LoginBuilder(builder.getDriver()).withCredentials("standard_user", "secret_sauce");
 
     Assert.assertTrue(
         builder.getDriver().getCurrentUrl().contains("inventory"),
@@ -76,7 +97,7 @@ public class SauceDemoSuite {
 
   @Test
   public void shouldHaveVisualUserLogin() {
-    new LoginBuilder(builder.getDriver()).loginAs("visual_user", "secret_sauce").run();
+    new LoginBuilder(builder.getDriver()).withCredentials("visual_user", "secret_sauce");
 
     Assert.assertTrue(
         builder.getDriver().getCurrentUrl().contains("inventory"),

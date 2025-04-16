@@ -3,14 +3,16 @@
 <suite name="SauceDemoSuite" parallel="methods" thread-count="8">
     <test name="LoginTestsFirefox">
         <parameter name="browser" value="FIREFOX" />
+        <parameter name="device" value="DESKTOP" />
         <classes>
             <class name="org.example.SauceDemoSuite"/>
         </classes>
     </test>
-    <!-- <test name="LoginTestsChrome">
+    <test name="LoginTestsChrome">
         <parameter name="browser" value="CHROME" />
+        <parameter name="device" value="TABLET" />
         <classes>
-            <class name="org.example.VisualUserLoginTest"/>
+            <class name="org.example.SauceDemoSuite"/>
         </classes>
-    </test> -->
+    </test>
 </suite>

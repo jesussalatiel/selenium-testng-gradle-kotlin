@@ -10,14 +10,25 @@ public class LoginPage extends BasePage {
   private static final By PASSWORD_FIELD = By.id("password");
   private static final By LOGIN_BUTTON = By.id("login-button");
 
-  public LoginPage(WebDriver driver) {
+  protected LoginPage(WebDriver driver) {
     super(driver);
   }
 
-  public void login(String username, String password) {
-    sendKeys(USERNAME_FIELD, username);
-    sendKeys(PASSWORD_FIELD, password);
+  protected void login(String username, String password) {
+    setUsername(username);
+    setPassword(password);
+    performSubmit();
+  }
 
+  protected void setUsername(String username) {
+    sendKeys(USERNAME_FIELD, username);
+  }
+
+  protected void setPassword(String password) {
+    sendKeys(PASSWORD_FIELD, password);
+  }
+
+  protected void performSubmit() {
     findElement(LOGIN_BUTTON).click();
   }
 }

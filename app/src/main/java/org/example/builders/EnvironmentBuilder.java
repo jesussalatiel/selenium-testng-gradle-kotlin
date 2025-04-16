@@ -1,7 +1,10 @@
 package org.example.builders;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import java.util.HashMap;
+import java.util.Map;
 import org.example.utils.Browser;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -12,41 +15,57 @@ import org.openqa.selenium.safari.SafariDriver;
 public class EnvironmentBuilder {
 
   private static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
-  String headless = System.getProperty("headless", "false");
-  boolean isHeadless = headless.equalsIgnoreCase("true");
 
-  public EnvironmentBuilder setDriver(Browser browser) {
-    WebDriver driver;
-    switch (browser) {
-      case Browser.CHROME:
-        WebDriverManager.chromedriver().setup();
-        ChromeOptions chromeOptions = new ChromeOptions();
+  private static final Dimension DESKTOP_DIMENSION = new Dimension(1280, 720);
+  private static final Dimension TABLET_DIMENSION = new Dimension(600, 1024);
 
-        if (isHeadless) chromeOptions.addArguments("--headless");
-
-        driver = new ChromeDriver(chromeOptions);
-        break;
-
-      case Browser.FIREFOX:
-        WebDriverManager.firefoxdriver().setup();
-        FirefoxOptions firefoxOptions = new FirefoxOptions();
-
-        if (isHeadless) firefoxOptions.addArguments("-headless");
-
-        driver = new FirefoxDriver(firefoxOptions);
-        break;
-      case Browser.SAFARI:
-        WebDriverManager.safaridriver().setup();
-        driver = new SafariDriver();
-        break;
-
-      default:
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
-        break;
-    }
+  public EnvironmentBuilder setDriver(Browser browser, String device) {
+    WebDriver driver = createDriver(browser);
     driverThreadLocal.set(driver);
+    applyDeviceDimension(device);
     return this;
+  }
+
+  private WebDriver createDriver(Browser browser) {
+    boolean isHeadless = Boolean.parseBoolean(System.getProperty("headless", "false"));
+
+    switch (browser) {
+      case CHROME:
+        {
+          WebDriverManager.chromedriver().setup();
+          ChromeOptions options = new ChromeOptions();
+          options.addArguments("incognito");
+          if (isHeadless) {
+            options.addArguments("--headless=new");
+          }
+          return new ChromeDriver(options);
+        }
+      case FIREFOX:
+        {
+          WebDriverManager.firefoxdriver().setup();
+          FirefoxOptions options = new FirefoxOptions();
+          if (isHeadless) {
+            options.addArguments("-headless");
+          }
+          return new FirefoxDriver(options);
+        }
+      case SAFARI:
+        {
+          WebDriverManager.safaridriver().setup();
+          return new SafariDriver();
+        }
+      default:
+        throw new IllegalArgumentException("Unsupported browser: " + browser);
+    }
+  }
+
+  private void applyDeviceDimension(String device) {
+    Map<String, Dimension> deviceSizes = new HashMap<>();
+    deviceSizes.put("DESKTOP", DESKTOP_DIMENSION);
+    deviceSizes.put("TABLET", TABLET_DIMENSION);
+
+    Dimension selected = deviceSizes.getOrDefault(device.toUpperCase(), DESKTOP_DIMENSION);
+    driverThreadLocal.get().manage().window().setSize(selected);
   }
 
   public EnvironmentBuilder navigate(String url) {
