@@ -1,6 +1,3 @@
-
 package org.example;
 
-public class App {
-
-}
+public class App {}

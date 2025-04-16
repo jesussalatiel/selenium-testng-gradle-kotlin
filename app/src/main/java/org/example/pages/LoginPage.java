@@ -5,13 +5,18 @@ import org.openqa.selenium.WebDriver;
 
 public class LoginPage extends BasePage {
 
-    public LoginPage(WebDriver driver) {
-        super(driver);
-    }
+  private static final By USERNAME_FIELD = By.id("user-name");
+  private static final By PASSWORD_FIELD = By.id("password");
+  private static final By LOGIN_BUTTON = By.id("login-button");
 
-    public void login(String username, String password) {
-        findElement(By.id("user-name")).sendKeys(username);
-        findElement(By.id("password")).sendKeys(password);
-        findElement(By.id("login-button")).click();
-    }
+  public LoginPage(WebDriver driver) {
+    super(driver);
+  }
+
+  public void login(String username, String password) {
+    sendKeys(USERNAME_FIELD, username);
+    sendKeys(PASSWORD_FIELD, password);
+
+    findElement(LOGIN_BUTTON).click();
+  }
 }

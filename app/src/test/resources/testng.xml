@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="SauceDemoSuite" parallel="classes">
-    <test name="LoginTests">
+<suite name="SauceDemoSuite" parallel="methods" thread-count="8">
+    <test name="LoginTestsFirefox">
+        <parameter name="browser" value="FIREFOX" />
         <classes>
-            <!-- <class name="org.example.StandardUserLoginTest"/> -->
-            <!-- <class name="org.example.LockedOutUserErrorTest"/> -->
-            <!-- <class name="org.example.ProblemUserLoginTest"/> -->
-            <!-- <class name="org.example.PerformanceGlitchUserLoginTest"/> -->
-            <class name="org.example.ErrorUserLoginTest"/>
-            <!-- <class name="org.example.VisualUserLoginTest"/> -->
+            <class name="org.example.SauceDemoSuite"/>
         </classes>
     </test>
+    <!-- <test name="LoginTestsChrome">
+        <parameter name="browser" value="CHROME" />
+        <classes>
+            <class name="org.example.VisualUserLoginTest"/>
+        </classes>
+    </test> -->
 </suite>

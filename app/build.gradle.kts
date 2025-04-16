@@ -8,6 +8,8 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
+    jacoco
+    id("com.diffplug.spotless") version "6.25.0"
 }
 
 repositories {
@@ -24,7 +26,7 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
     implementation("org.seleniumhq.selenium:selenium-java:4.31.0")
-    
+
     // https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager
     implementation("io.github.bonigarcia:webdrivermanager:6.0.1")
 
@@ -42,6 +44,23 @@ application {
     mainClass = "org.example.App"
 }
 
+spotless {
+    // Opcional: formatear solo archivos cambiados desde origin/main
+    // ratchetFrom("origin/main")
+
+    format("misc") {
+        target("*.gradle.kts", "*.md", ".gitignore")
+        trimTrailingWhitespace()
+        indentWithSpaces(3)
+        endWithNewline()
+        encoding("UTF-8")
+    }
+
+    java {
+        googleJavaFormat()
+    }
+}
+
 tasks.named<Test>("test") {
     // Use TestNG for unit tests.
     useTestNG(){
@@ -51,4 +70,6 @@ tasks.named<Test>("test") {
     testLogging {
         events("passed", "skipped", "failed")
     }
+
+    systemProperty("headless", System.getProperty("headless") ?: "false")
 }
